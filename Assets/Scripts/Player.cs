@@ -40,7 +40,7 @@ public class Player : NetworkBehaviour {
     {
         if (hasBullet)
         {
-			GameObject b = (GameObject) GameObject.Instantiate (bullet, camera.transform.position + (camera.transform.forward * 2), camera.transform.rotation);
+			GameObject b = (GameObject) Network.Instantiate (bullet, camera.transform.position + (camera.transform.forward * 2), camera.transform.rotation,0);
 			b.GetComponent<Rigidbody> ().AddForce (camera.transform.forward * (600 * charged));
 			hasBullet = false;
 		}

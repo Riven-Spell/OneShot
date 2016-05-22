@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour {
 
 	void OnCollisionEnter(Collision c){
 		if (c.gameObject.tag == "Environment") {
-			GameObject.Instantiate (pickup, transform.position, transform.rotation);
+			Network.Instantiate (pickup, transform.position, transform.rotation,0);
 			Destroy (gameObject);
 		}
 	}
