@@ -1,7 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{C7FC2EE6-1FAD-0E2B-BA67-54EFDEE31481}") = "OneShot", "Assembly-CSharp.csproj", "{0CBD69C9-349F-63DB-185D-98BB4F98AB9B}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShot.CSharp", "OneShot.CSharp.csproj", "{FD80BF6C-38FC-17CE-C37C-CC27AFF3CD21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0CBD69C9-349F-63DB-185D-98BB4F98AB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CBD69C9-349F-63DB-185D-98BB4F98AB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CBD69C9-349F-63DB-185D-98BB4F98AB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CBD69C9-349F-63DB-185D-98BB4F98AB9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD80BF6C-38FC-17CE-C37C-CC27AFF3CD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD80BF6C-38FC-17CE-C37C-CC27AFF3CD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD80BF6C-38FC-17CE-C37C-CC27AFF3CD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD80BF6C-38FC-17CE-C37C-CC27AFF3CD21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal
