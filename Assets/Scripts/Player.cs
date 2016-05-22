@@ -14,7 +14,6 @@ public class Player : NetworkBehaviour {
 
     public override void OnStartLocalPlayer() {
         camera.SetActive(true);
-		Debug.Log ("Cancer");
     }
 
     void Start() {
@@ -32,8 +31,8 @@ public class Player : NetworkBehaviour {
     {
         if (hasBullet)
         {
-			GameObject b = (GameObject) GameObject.Instantiate (bullet, transform.position + (transform.forward * 2), transform.rotation);
-			b.GetComponent<Rigidbody> ().AddForce (transform.forward * (600 * charged));
+			GameObject b = (GameObject) GameObject.Instantiate (bullet, camera.transform.position + (camera.transform.forward * 2), camera.transform.rotation);
+			b.GetComponent<Rigidbody> ().AddForce (camera.transform.forward * (600 * charged));
 			hasBullet = false;
 		}
     }
