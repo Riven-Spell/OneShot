@@ -6,10 +6,12 @@ public class Player : NetworkBehaviour {
     // Update is called once per frame
     public GameObject camera;
     public GameObject bullet;
+	public Rigidbody rb;
 
 	bool hasBullet = false;
 
     public bool isCharging = false;
+	public int JumpCool = 100;
 	int charged = 0;
 
     public override void OnStartLocalPlayer() {
@@ -41,9 +43,14 @@ public class Player : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
-        gameObject.transform.Rotate(new Vector3(0, 1, 0), Input.GetAxis("Mouse X"));
+        gameObject.transform.Rotate(new Vector3(0, 1, 0), Input.GetAxis("Mouse X")*2);
         gameObject.transform.position += gameObject.transform.forward * (Input.GetAxis("Vertical") * 0.1f);
         gameObject.transform.position += gameObject.transform.right * (Input.GetAxis("Horizontal") * 0.1f);
+
+		if (Input.GetKeyDown (KeyCode.Space)) 
+		{
+			rb.AddForce (0.0f, 0.2f, 0.0f);
+		}
 
         if (Input.GetKeyDown(KeyCode.Q)) {
             gameObject.transform.position += Vector3.up;
