@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour {
     // Update is called once per frame
     public GameObject camera;
     public GameObject bullet;
+
 	bool hasBullet = false;
 
     bool isCharging = false;
