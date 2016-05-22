@@ -12,9 +12,12 @@ public class Player : NetworkBehaviour {
 
 
     void Update () {
-        if (!       isLocalPlayer)
+        if (!isLocalPlayer)
             return;
 
         gameObject.transform.Rotate(new Vector3(0, 1, 0), Input.GetAxis("Mouse X"));
+        gameObject.transform.position += gameObject.transform.forward * (Input.GetAxis("Vertical") * 0.1f);
+        gameObject.transform.position += gameObject.transform.right * (Input.GetAxis("Horizontal") * 0.1f);
+        //gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(Input.GetAxis("Horizontal") * 10, 0, Input.GetAxis("Vertical") * 10));
     }
 }
