@@ -14,6 +14,7 @@ public class Player : NetworkBehaviour {
 
     public override void OnStartLocalPlayer() {
         camera.SetActive(true);
+		Debug.Log ("Cancer");
     }
 
     void Start() {
@@ -24,7 +25,7 @@ public class Player : NetworkBehaviour {
     {
         if (isCharging)
             charged += 1;
-		Debug.Log (charged);
+		// Debug.Log (charged);
     }
 
     void Fire()
