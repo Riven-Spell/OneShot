@@ -8,8 +8,8 @@ public class Player : NetworkBehaviour {
     public GameObject bullet;
 	bool hasBullet = false;
 
-    bool isCharging = false;
-    int charged = 0;
+    public bool isCharging = false;
+	int charged = 0;
 
     public override void OnStartLocalPlayer() {
         camera.SetActive(true);
@@ -23,14 +23,17 @@ public class Player : NetworkBehaviour {
     {
         if (isCharging)
             charged += 1;
+		Debug.Log (charged);
     }
 
     void Fire()
     {
         if (hasBullet)
         {
-            
-        }
+			GameObject b = (GameObject) GameObject.Instantiate (bullet, transform.position + (transform.forward * 2), transform.rotation);
+			b.GetComponent<Rigidbody> ().AddForce (transform.forward * (600 * charged));
+			hasBullet = false;
+		}
     }
 
     void Update() {
@@ -41,18 +44,19 @@ public class Player : NetworkBehaviour {
         gameObject.transform.position += gameObject.transform.forward * (Input.GetAxis("Vertical") * 0.1f);
         gameObject.transform.position += gameObject.transform.right * (Input.GetAxis("Horizontal") * 0.1f);
 
-        if (Input.GetKey(KeyCode.Mouse1))
+		if (Input.GetAxis("Fire1") > 0)
         {
             isCharging = true;
             if (charged >= 9)
             {
-                //Launch bullet.
+				Fire ();
             }
         }
         else
         {
+			if (isCharging)
+				Fire ();
             isCharging = false;
-            //Launch bullet
             charged = 0;
         }
         //gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(Input.GetAxis("Horizontal") * 10, 0, Input.GetAxis("Vertical") * 10));
