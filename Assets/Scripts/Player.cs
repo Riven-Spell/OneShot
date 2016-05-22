@@ -6,13 +6,18 @@ public class Player : NetworkBehaviour {
     // Update is called once per frame
     public GameObject camera;
     public GameObject bullet;
+	public GameObject heldBullet;
 	public Rigidbody rb;
 
 	bool hasBullet = false;
+
+	[SyncVar]
 	int hadtime = 0;
+	[SyncVar]
 	int timesincelasthad = 0;
 
     public bool isCharging = false;
+	[SyncVar]
 	int charged = 0;
 
     public override void OnStartLocalPlayer() {
@@ -20,29 +25,37 @@ public class Player : NetworkBehaviour {
     }
 
     void Start() {
-        InvokeRepeating("Charge", 0.0f, 1.0f);
+        InvokeRepeating("CmdCharge", 0.0f, 1.0f);
+		rb.AddForce (new Vector3 (Random.Range (0, 6000), Random.Range (0, 6000), Random.Range (0, 6000)));
     }
 
-    void Charge()
+	[Command]
+    void CmdCharge()
     {
         if (isCharging)
             charged += 1;
 		if (hasBullet) {
 			hadtime += 1;
 			if (hadtime > 30)
-				Fire ();
+				CmdFire ();
 		}
 		else
 			timesincelasthad += 1;
     }
 
-    void Fire()
+	[Command]
+    void CmdFire()
     {
         if (hasBullet)
         {
-			GameObject b = (GameObject) Network.Instantiate (bullet, camera.transform.position + (camera.transform.forward * 2), camera.transform.rotation,0);
-			b.GetComponent<Rigidbody> ().AddForce (camera.transform.forward * (600 * charged));
+			GameObject b = (GameObject) GameObject.Instantiate (bullet, camera.transform.position + (camera.transform.forward * 2), camera.transform.rotation );
+			b.GetComponent<Rigidbody> ().AddForce (camera.transform.forward * (600 * 3));
+			NetworkServer.Spawn (b);
+
+			Debug.Log (charged);
+
 			hasBullet = false;
+			heldBullet.SetActive (false);
 		}
     }
 
@@ -70,32 +83,38 @@ public class Player : NetworkBehaviour {
             isCharging = true;
             if (charged >= 9)
             {
-				Fire ();
+				CmdFire ();
             }
         }
         else
         {
 			if (isCharging)
-				Fire ();
+				CmdFire ();
             isCharging = false;
             charged = 0;
         }
         //gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(Input.GetAxis("Horizontal") * 10, 0, Input.GetAxis("Vertical") * 10));
     }
 
+	[ClientRpc]
+	void RpcDeath(){
+		camera.transform.SetParent(GameObject.Find("SpecPoint").transform);
+		camera.transform.localPosition = new Vector3(0, 0, 0);
+		camera.transform.localRotation = Quaternion.identity;
+		Destroy(gameObject);
+	}
+
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "bulletpickup" && timesincelasthad > 2) {
 			hasBullet = true;
 			Destroy (collision.gameObject);
+			heldBullet.SetActive (true);
 		}
 
 		if (collision.gameObject.tag == "bullet")
         {
             //DEATH STRIKES!
-            camera.transform.SetParent(GameObject.Find("SpecPoint").transform);
-            camera.transform.localPosition = new Vector3(0, 0, 0);
-            camera.transform.localRotation = Quaternion.identity;
-            Destroy(gameObject);
+			RpcDeath();
         }
 	}
 
