@@ -9,9 +9,10 @@ public class Player : NetworkBehaviour {
 	public Rigidbody rb;
 
 	bool hasBullet = false;
+	int hadtime = 0;
+	int timesincelasthad = 0;
 
     public bool isCharging = false;
-	public int JumpCool = 100;
 	int charged = 0;
 
     public override void OnStartLocalPlayer() {
@@ -26,7 +27,13 @@ public class Player : NetworkBehaviour {
     {
         if (isCharging)
             charged += 1;
-		// Debug.Log (charged);
+		if (hasBullet) {
+			hadtime += 1;
+			if (hadtime > 30)
+				Fire ();
+		}
+		else
+			timesincelasthad += 1;
     }
 
     void Fire()
@@ -44,23 +51,18 @@ public class Player : NetworkBehaviour {
             return;
 
         gameObject.transform.Rotate(new Vector3(0, 1, 0), Input.GetAxis("Mouse X")*2);
-        gameObject.transform.position += gameObject.transform.forward * (Input.GetAxis("Vertical") * 0.1f);
-        gameObject.transform.position += gameObject.transform.right * (Input.GetAxis("Horizontal") * 0.1f);
-
-		if (Input.GetKeyDown (KeyCode.Space)) 
-		{
-			rb.AddForce (0.0f, 0.2f, 0.0f);
-		}
+        gameObject.transform.position += gameObject.transform.forward * (Input.GetAxis("Vertical") * 0.25f);
+        gameObject.transform.position += gameObject.transform.right * (Input.GetAxis("Horizontal") * 0.25f);
 
         if (Input.GetKeyDown(KeyCode.Q)) {
             gameObject.transform.position += Vector3.up;
-            gameObject.GetComponent<Rigidbody>().AddForce(transform.right * -10);
+            gameObject.GetComponent<Rigidbody>().AddForce(transform.right * -1000);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.position += Vector3.up;
-            gameObject.GetComponent<Rigidbody>().AddForce(transform.right * 10);
+            gameObject.GetComponent<Rigidbody>().AddForce(transform.right * 1000);
 		}
 
 		if (Input.GetAxis("Fire1") > 0)
@@ -82,12 +84,12 @@ public class Player : NetworkBehaviour {
     }
 
 	void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.tag == "bulletpickup") {
+		if (collision.gameObject.tag == "bulletpickup" && timesincelasthad > 2) {
 			hasBullet = true;
 			Destroy (collision.gameObject);
 		}
 
-        if (collision.gameObject.tag == "bullet")
+		if (collision.gameObject.tag == "bullet")
         {
             //DEATH STRIKES!
             camera.transform.SetParent(GameObject.Find("SpecPoint").transform);
@@ -95,6 +97,15 @@ public class Player : NetworkBehaviour {
             camera.transform.localRotation = Quaternion.identity;
             Destroy(gameObject);
         }
+	}
+
+	void OnCollisionStay(Collision c){
+		if (c.gameObject.tag == "Environment") {
+			if (Input.GetKeyDown (KeyCode.Space)) 
+			{
+				rb.AddForce (transform.up * 200);
+			}
+		}
 	}
 }
 
